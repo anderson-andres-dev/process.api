@@ -1,0 +1,4 @@
+deployment:
+  tasks:
+    - export APP_ENV=production
+    - /bin/bash deploy.sh

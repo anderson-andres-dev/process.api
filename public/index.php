@@ -4,6 +4,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use App\Process\Classes\Hello;
 use App\Process\BD\Connection;
+use App\Process\Classes\Location;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -22,6 +23,13 @@ $app->get('/hello/{nombre}', function (Request $request, Response $response, arr
     $json = $hello->saludar(nombre: $args['nombre']);
 
     $response->getBody()->write($json);
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/paises', function (Request $request, Response $response, array $args) {
+    $location = new Location();
+    $paises = $location->getPaises();
+    $response->getBody()->write($paises);
     return $response->withHeader('Content-Type', 'application/json');
 });
 

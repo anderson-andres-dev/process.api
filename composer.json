@@ -1,0 +1,22 @@
+{
+    "name": "app/process",
+    "description": "simple project",
+    "type": "project",
+    "require": {
+        "slim/slim": "^4.14",
+        "slim/psr7": "^1.7"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "App\\Process\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "anderson",
+            "email": "anderson.andres.dev@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}

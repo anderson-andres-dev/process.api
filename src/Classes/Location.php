@@ -3,22 +3,23 @@
 namespace App\Process\Classes;
 
 use App\Process\BD\Connection;
-use PDO;
+use App\Process\BD\DB;
 
-class Location
+Class Location
 {
-
-    public function getPaises(): string
+    public function __construct()
     {
+        $connection = new Connection();
+        DB::init($connection);
+    }
 
-        $conn = new Connection();
-        $pdo = $conn->getConnection();
-
-        $sql = 'SELECT nombre, iso3 from paises';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-
-        $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return json_encode($resultados, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    public function getPaises(): array
+    {
+        try {
+            $result = DB::SELECT(['nombre', 'iso3'], 'paises');
+            return $result;
+        } catch (\Exception $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 }

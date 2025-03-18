@@ -17,14 +17,28 @@ class DB {
     public static function SELECT(array $columns, string $table, array $where = []) {
         $cols = implode(', ', $columns);
         $sql = "SELECT $cols FROM $table";
-
+        $params = [];
+    
         if (!empty($where)) {
-            $conditions = implode(' AND ', array_map(fn($key) => "$key = ?", array_keys($where)));
-            $sql .= " WHERE $conditions";
+            $conditions = [];
+            foreach ($where as $key => $value) {
+                if (is_array($value) && count($value) === 2) {
+                    $operator = strtoupper($value[0]); // Ej: ">=", "<=", "!="
+                    $val = $value[1];
+                } else {
+                    $operator = "="; // Por defecto usa "="
+                    $val = $value;
+                }
+    
+                $conditions[] = "$key $operator ?";
+                $params[] = $val;
+            }
+            $sql .= " WHERE " . implode(' AND ', $conditions);
         }
-
-        return self::query($sql, array_values($where));
+    
+        return self::query($sql, $params);
     }
+    
 
     // Método SELECT_ALL, devuelve todas las filas de una tabla
     public static function SELECT_ALL(string $table) {
